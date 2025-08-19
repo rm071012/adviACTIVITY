@@ -7,17 +7,19 @@
   <style>
     html, body { height: 100%; margin: 0; }
     body {
-      background: #ffffff; /* pure white background */
+      background: #ffffff;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
       color: #2b2b2b;
+      display: flex;
+      flex-direction: row;
     }
 
     .clock-box {
       position: fixed;
       top: 1rem;
       right: 1rem;
-      background: #1B212D; /* dark background for contrast */
-      color: #ffffff; /* white text */
+      background: #1B212D;
+      color: #ffffff;
       border-radius: 1rem;
       padding: 2rem 3rem;
       font-size: 3rem;
@@ -51,7 +53,7 @@
       height: 70px;
       font-weight: 600;
       color: #fff;
-      opacity: 0.2; /* make dimmer by default */
+      opacity: 0.2;
       filter: brightness(60%);
       transition: all 0.5s ease;
     }
@@ -64,13 +66,36 @@
 
     .active {
       opacity: 1 !important;
-      filter: brightness(120%) !important; /* make brighter when active */
+      filter: brightness(120%) !important;
       transform: scale(1.05);
+    }
+
+    .photo-box {
+      margin-left: 25%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 70%;
+      height: 100vh;
+    }
+
+    .photo-box img {
+      max-width: 80%;
+      max-height: 80%;
+      border-radius: 20px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      display: none;
+    }
+
+    .photo-box img.active-photo {
+      display: block;
     }
 
     @media (max-width: 600px) {
       .left-panel { width: 40%; }
       .clock-box { font-size: 2rem; padding: 1rem 1.25rem; }
+      .photo-box { margin-left: 0; width: 100%; height: auto; }
+      .photo-box img { max-width: 95%; max-height: 60vh; }
     }
   </style>
 </head>
@@ -81,6 +106,16 @@
     <div class="left-box activity1" id="activity1">Activity</div>
     <div class="left-box lunch" id="lunch">Lunch</div>
     <div class="left-box activity2" id="activity2">Activity</div>
+  </div>
+
+  <div class="photo-box">
+    <!-- Add your images in the /images folder on GitHub -->
+    <!-- Just replace the placeholder filenames with your own, e.g. wake.png, breakfast.png, etc. -->
+    <img src="images/wake.png" id="wakePhoto" alt="Wake up!">
+    <img src="images/breakfast.jpeg" id="breakfastPhoto" alt="Breakfast">
+    <img src="images/activity1.png" id="activity1Photo" alt="Activity">
+    <img src="images/lunch.png" id="lunchPhoto" alt="Lunch">
+    <img src="images/activity2.png" id="activity2Photo" alt="Activity">
   </div>
 
   <div class="clock-box" id="clock">--:--</div>
@@ -96,24 +131,27 @@
       }).format(now);
       document.getElementById('clock').textContent = ukTimeString;
 
-      // Clear active highlights
       document.querySelectorAll('.left-box').forEach(box => box.classList.remove('active'));
+      document.querySelectorAll('.photo-box img').forEach(img => img.classList.remove('active-photo'));
 
-      // Get UK time in hours
       const ukNow = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/London' }));
       const hour = ukNow.getHours();
 
-      // Assign activities to times
       if (hour >= 7 && hour < 8) {
         document.getElementById('wake').classList.add('active');
-      } else if (hour >= 8 && hour < 10) {
+        document.getElementById('wakePhoto').classList.add('active-photo');
+      } else if (hour >= 8 && hour < 9) {
         document.getElementById('breakfast').classList.add('active');
-      } else if (hour >= 10 && hour < 13) {
+        document.getElementById('breakfastPhoto').classList.add('active-photo');
+      } else if (hour >= 9 && hour < 12) {
         document.getElementById('activity1').classList.add('active');
-      } else if (hour >= 13 && hour < 14) {
+        document.getElementById('activity1Photo').classList.add('active-photo');
+      } else if (hour >= 12 && hour < 13) {
         document.getElementById('lunch').classList.add('active');
-      } else if (hour >= 14 && hour < 16) {
+        document.getElementById('lunchPhoto').classList.add('active-photo');
+      } else if (hour >= 13 && hour < 17) {
         document.getElementById('activity2').classList.add('active');
+        document.getElementById('activity2Photo').classList.add('active-photo');
       }
     }
 
